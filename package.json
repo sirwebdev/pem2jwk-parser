@@ -1,18 +1,34 @@
 {
   "name": "pemtojwk",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A tool to convert a PEM file to JWK is a software that allows for the conversion of a Privacy Enhanced Mail (PEM) encoded certificate into a JSON Web Key (JWK) format. The tool takes a PEM file as input and outputs the equivalent JWK representation, containing information such as the public key and its associated algorithms. The JWK can then be used for encryption and digital signatures in a JSON-based format. This tool is useful for individuals working with PEM certificates and needing to use them in applications that expect JWK input.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "lint": "prettier --write . && eslint . --fix"
+    "lint": "eslint . --fix",
+    "prepare": "npm run build",
+    "preversion": "npm run lint",
+    "format": "prettier --write .",
+    "prepublishOnly": "npm run lint",
+    "postversion": "git push && git push --tags",
+    "version": "npm run format && git add -A src"
   },
-  "files": ["lib/**/*"],
-  "keywords": [],
+  "files": [
+    "lib/**/*"
+  ],
+  "keywords": [
+    "pem2jwk",
+    "convert",
+    "jwk",
+    "PEM",
+    "pemtojwk",
+    "pem-jwk"
+  ],
   "author": "pmartinsdev",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
