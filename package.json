@@ -1,5 +1,5 @@
 {
-  "name": "pemtojwk",
+  "name": "pem2jwk",
   "version": "1.0.0",
   "description": "A tool to convert a PEM file to JWK is a software that allows for the conversion of a Privacy Enhanced Mail (PEM) encoded certificate into a JSON Web Key (JWK) format. The tool takes a PEM file as input and outputs the equivalent JWK representation, containing information such as the public key and its associated algorithms. The JWK can then be used for encryption and digital signatures in a JSON-based format. This tool is useful for individuals working with PEM certificates and needing to use them in applications that expect JWK input.",
   "main": "lib/index.js",
@@ -19,7 +19,7 @@
   ],
   "keywords": [
     "pem2jwk",
-    "convert",
+    "converter",
     "jwk",
     "PEM",
     "pemtojwk",
