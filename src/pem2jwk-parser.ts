@@ -16,7 +16,7 @@ interface JWK {
 
 type PEM = string | Buffer;
 export type PEMType = "public" | "private";
-type ExtraKeys = Record<string, string>;
+export type ExtraKeys = Record<string, string>;
 
 type IsRequired<T, K> = undefined extends T ? never : K;
 type RequiredKeys<T> = { [K in keyof T]-?: IsRequired<T[K], K> }[keyof T];
@@ -31,7 +31,7 @@ export class Pem2Jwk {
   protected static TEMP_PEM_FILE_NAME = "temp.pem";
 
   protected static checkISValidPemType(pem: string, type: PEMType) {
-    const isInvalidPemType = !pem.includes(type);
+    const isInvalidPemType = !pem.includes(type.toUpperCase());
 
     if (isInvalidPemType)
       throw new Error('.PEM file must be "public" or "private".');

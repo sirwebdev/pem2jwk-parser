@@ -1,6 +1,6 @@
 {
   "name": "pem2jwk-parser",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A tool to convert a PEM file to a JSON Web Key (JWK). AThe package provides methods to convert both public and private PEM files, as well as a method to convert a private PEM to a public JWK.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
