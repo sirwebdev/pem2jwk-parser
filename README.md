@@ -1,23 +1,111 @@
-# Easy way to create a JWK from a .PEM file
-A PEM to JWK tool converts a Privacy Enhanced Mail (PEM) encoded certificate to a JSON Web Key (JWK) format, containing information such as the public key and its algorithms. Useful for using PEM certificates in applications that expect JWK input.
+# Pem2Jwk
 
-# requirements
+A tool to convert a PEM file to a JSON Web Key (JWK).
 
-- [OpenSSL](https://www.openssl.org/)
+The package provides methods to convert both public and private PEM files, as well as a method to convert a private PEM to a public JWK.
 
-# Usage
+## Requirements
+
+- [OpenSSL](https://www.openssl.org/docs/man1.1.0/man3/RSA_generate_key.html) 1.1.0 or later
+
+## Table of Contents
+
+- [fromPublic](#frompublic)
+- [fromPrivate](#fromprivate)
+- [fromPrivateToPublic](#fromprivatetopublic)
+
+---
+
+## fromPublic
+
+This method takes a public PEM file and converts it to a JSON Web Key (JWK).
+
+#### Syntax
 
 ```typescript
-import * as fs from "fs";
-import { getPublicJWKFromPrivatePEMBuffer } from "jwk2pem-parser";
+Pem2Jwk.fromPublic(publicPem: PEM, extraKeys?: ExtraKeys): PublicJWK<T>
+```
 
-const pemBuffer = fs.readFileSync("key.pem");
+#### Parameters
 
-getPublicJWKFromPrivatePEMBuffer(pemBuffer).then(console.log);
+- `publicPem`: The public PEM file. Can be a string or a Buffer.
+- `extraKeys` (optional): An object that provides additional information to be included in the JWK.
 
-// {
-//   kty: string,
-//   n: string,
-//   e: string
-// }
+#### Return Value
+
+The public JWK.
+
+#### Example
+
+```typescript
+const publicPem = `-----BEGIN PUBLIC KEY-----
+...
+-----END PUBLIC KEY-----`;
+const publicJwk = Pem2Jwk.fromPublic(publicPem);
+console.log(publicJwk);
+```
+
+---
+
+## fromPrivate
+
+This method takes a private PEM file and converts it to a JSON Web Key (JWK).
+
+#### Syntax
+
+```typescript
+Pem2Jwk.fromPrivate(privatePem: PEM, extraKeys?: ExtraKeys): PrivateJWK<T>
+```
+
+#### Parameters
+
+- `privatePem`: The private PEM file. Can be a string or a Buffer.
+- `extraKeys` (optional): An object that provides additional information to be included in the JWK.
+
+#### Return Value
+
+The private JWK.
+
+#### Example
+
+```typescript
+const privatePem = `-----BEGIN RSA PRIVATE KEY-----
+...
+-----END RSA PRIVATE KEY-----`;
+const privateJwk = Pem2Jwk.fromPrivate(privatePem);
+console.log(privateJwk);
+```
+
+---
+
+## fromPrivateToPublic
+
+This method converts a private PEM key to a public JWK. The private PEM key is passed as a parameter to the method, and the public JWK is returned.
+
+The method works by first creating a temporary PEM file from the private PEM key and then using `openssl` to generate a public key from that file. The public key is then converted to a JWK using the `fromPublic` method.
+
+#### Syntax
+
+```typescript
+Pem2Jwk.fromPrivateToPublic(privatePem: PEM, extraKeys?: ExtraKeys): Promise<PublicJWK<T>>
+```
+
+#### Parameters
+
+- `privatePem`: The private PEM file. Can be a string or a Buffer.
+- `extraKeys` (optional): An object that provides additional information to be included in the JWK.
+
+#### Return Value
+
+A Promise that resolves to the public JWK.
+
+#### Example
+
+```typescript
+const privatePem = `-----BEGIN RSA PRIVATE KEY-----
+...
+-----END RSA PRIVATE KEY-----`;
+Pem2Jwk.fromPrivateToPublic(privatePem).then(publicJwk => {
+  console.log(publicJwk);
+});
 ```
