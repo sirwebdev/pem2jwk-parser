@@ -1,8 +1,6 @@
 # Pem2Jwk
 
-A tool to convert a PEM file to a JSON Web Key (JWK).
-
-The package provides methods to convert both public and private PEM files, as well as a method to convert a private PEM to a public JWK.
+A tool to convert a PEM file to a JSON Web Key (JWK). AThe package provides methods to convert both public and private PEM files, as well as a method to convert a private PEM to a public JWK.
 
 ## Requirements
 
@@ -23,7 +21,7 @@ This method takes a public PEM file and converts it to a JSON Web Key (JWK).
 #### Syntax
 
 ```typescript
-Pem2Jwk.fromPublic(publicPem: PEM, extraKeys?: ExtraKeys): PublicJWK<T>
+Pem2Jwk.fromPublic<T>(publicPem: PEM, extraKeys?: T): PublicJWK<T>
 ```
 
 #### Parameters
@@ -54,7 +52,7 @@ This method takes a private PEM file and converts it to a JSON Web Key (JWK).
 #### Syntax
 
 ```typescript
-Pem2Jwk.fromPrivate(privatePem: PEM, extraKeys?: ExtraKeys): PrivateJWK<T>
+Pem2Jwk.fromPrivate<T>(privatePem: PEM, extraKeys?: T): PrivateJWK<T>
 ```
 
 #### Parameters
@@ -72,6 +70,7 @@ The private JWK.
 const privatePem = `-----BEGIN RSA PRIVATE KEY-----
 ...
 -----END RSA PRIVATE KEY-----`;
+
 const privateJwk = Pem2Jwk.fromPrivate(privatePem);
 console.log(privateJwk);
 ```
@@ -87,7 +86,7 @@ The method works by first creating a temporary PEM file from the private PEM key
 #### Syntax
 
 ```typescript
-Pem2Jwk.fromPrivateToPublic(privatePem: PEM, extraKeys?: ExtraKeys): Promise<PublicJWK<T>>
+Pem2Jwk.fromPrivateToPublic<T>(privatePem: PEM, extraKeys?: T): Promise<PublicJWK<T>>
 ```
 
 #### Parameters
@@ -105,6 +104,7 @@ A Promise that resolves to the public JWK.
 const privatePem = `-----BEGIN RSA PRIVATE KEY-----
 ...
 -----END RSA PRIVATE KEY-----`;
+
 Pem2Jwk.fromPrivateToPublic(privatePem).then(publicJwk => {
   console.log(publicJwk);
 });
