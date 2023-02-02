@@ -1,16 +1,24 @@
+import { pem2jwk } from "pem-jwk";
 import { exec } from "child_process";
 import { unlink, writeFileSync } from "fs";
-import { pem2jwk } from "pem-jwk";
+
+export interface GetPublicJWKFromPrivatePEMBufferResponse {
+  kty: string;
+  n: string;
+  e: string;
+}
 
 function createFile(name: string, content: string) {
   writeFileSync(name, content);
 }
 
 function removeFile(path: string) {
-  unlink(path, () => {});
+  unlink(path, () => { });
 }
 
-export async function getPublicJWKFromPrivatePEMBuffer(pem: Buffer) {
+export async function getPublicJWKFromPrivatePEMBuffer(
+  pem: Buffer,
+): Promise<GetPublicJWKFromPrivatePEMBufferResponse> {
   const tempPemFile = "temp.pem";
 
   const JWK = await new Promise((resolve, reject) => {
@@ -28,5 +36,5 @@ export async function getPublicJWKFromPrivatePEMBuffer(pem: Buffer) {
 
   removeFile(tempPemFile);
 
-  return JWK;
+  return JWK as GetPublicJWKFromPrivatePEMBufferResponse;
 }
