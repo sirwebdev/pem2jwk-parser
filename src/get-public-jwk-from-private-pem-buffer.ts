@@ -17,7 +17,7 @@ export async function getPublicJWKFromPrivatePEMBuffer(pem: Buffer) {
     createFile(tempPemFile, pem.toString());
 
     exec(`openssl rsa -in ${tempPemFile} -pubout`, (error, stdout) => {
-      if (error) {
+      if (error != null) {
         reject(error);
         return;
       }
