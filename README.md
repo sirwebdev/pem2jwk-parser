@@ -1,4 +1,5 @@
 # Easy way to create a JWK from a .PEM file
+A PEM to JWK tool converts a Privacy Enhanced Mail (PEM) encoded certificate to a JSON Web Key (JWK) format, containing information such as the public key and its algorithms. Useful for using PEM certificates in applications that expect JWK input.
 
 # requirements
 
