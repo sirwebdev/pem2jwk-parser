@@ -1,1 +1,1 @@
-export * from "./convert-from-buffer";
+export * from "./get-public-jwk-from-private-pem-buffer";
