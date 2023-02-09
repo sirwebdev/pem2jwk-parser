@@ -1,6 +1,6 @@
 {
   "name": "pem2jwk-parser",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "A tool to convert a PEM file to a JSON Web Key (JWK). AThe package provides methods to convert both public and private PEM files, as well as a method to convert a private PEM to a public JWK.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -10,7 +10,7 @@
     "prepare": "npm run build",
     "preversion": "npm run lint",
     "format": "prettier --write .",
-    "prepublishOnly": "npm run lint",
+    "prepublishOnly": "npm run lint && npm run build",
     "postversion": "git push && git push --tags",
     "version": "npm run format && git add -A src",
     "dev": "tsnd --inspect --transpile-only --ignore-watch node_modules --respawn ./src/index.ts"
