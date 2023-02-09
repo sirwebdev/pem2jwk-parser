@@ -1,7 +1,7 @@
 import * as path from "path";
 import { pem2jwk } from "pem-jwk";
 import { exec } from "child_process";
-import { unlink, mkdir, writeFileSync } from "fs";
+import { unlink, mkdir, writeFileSync, createWriteStream } from "fs";
 
 interface JWK {
   kty: string;
@@ -30,7 +30,7 @@ export type PrivateJWK<T extends ExtraKeys> = Required<JWK> &
 
 export class Pem2Jwk {
   protected static TEMP_FILE_NAME = "temp.pem";
-  protected static TEMP_FILE_FOLDER_NAME = "temp";
+  protected static TEMP_FILE_FOLDER_NAME = "./temp";
 
   protected static checkISValidPemType(pem: string, type: PEMType) {
     const isInvalidPemType = !pem.includes(type.toUpperCase());
@@ -76,10 +76,9 @@ export class Pem2Jwk {
   }
 
   private static createTempFolder(): string {
-    const tempPath = path.resolve(__dirname, this.TEMP_FILE_FOLDER_NAME);
-    mkdir(tempPath, { recursive: true }, () => {});
+    mkdir(this.TEMP_FILE_FOLDER_NAME, { recursive: true }, () => {});
 
-    return tempPath;
+    return this.TEMP_FILE_FOLDER_NAME;
   }
 
   static async fromPrivateToPublic<T extends ExtraKeys>(
