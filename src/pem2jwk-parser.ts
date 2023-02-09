@@ -1,7 +1,7 @@
 import * as path from "path";
 import { pem2jwk } from "pem-jwk";
 import { exec } from "child_process";
-import { unlink, mkdir, writeFileSync, createWriteStream } from "fs";
+import { unlink, mkdir, writeFileSync } from "fs";
 
 interface JWK {
   kty: string;
