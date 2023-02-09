@@ -1,6 +1,7 @@
+import * as path from "path";
 import { pem2jwk } from "pem-jwk";
 import { exec } from "child_process";
-import { unlink, writeFileSync } from "fs";
+import { unlink, mkdir, writeFileSync } from "fs";
 
 interface JWK {
   kty: string;
@@ -28,7 +29,8 @@ export type PrivateJWK<T extends ExtraKeys> = Required<JWK> &
   Record<keyof T, T[keyof T]>;
 
 export class Pem2Jwk {
-  protected static TEMP_PEM_FILE_NAME = "temp.pem";
+  protected static TEMP_FILE_NAME = "temp.pem";
+  protected static TEMP_FILE_FOLDER_NAME = "temp";
 
   protected static checkISValidPemType(pem: string, type: PEMType) {
     const isInvalidPemType = !pem.includes(type.toUpperCase());
@@ -43,8 +45,8 @@ export class Pem2Jwk {
     return isPemBuffer ? pem.toString() : pem;
   }
 
-  protected static createFile(name: string, content: string) {
-    writeFileSync(name, content);
+  protected static createFile(path: string, content: string) {
+    writeFileSync(path, content);
   }
 
   protected static removeFile(path: string) {
@@ -73,6 +75,13 @@ export class Pem2Jwk {
     return pem2jwk(pem, extraKeys) as any;
   }
 
+  private static createTempFolder(): string {
+    const tempPath = path.resolve(__dirname, this.TEMP_FILE_FOLDER_NAME);
+    mkdir(tempPath, { recursive: true }, () => {});
+
+    return tempPath;
+  }
+
   static async fromPrivateToPublic<T extends ExtraKeys>(
     privatePem: PEM,
     extraKeys?: T,
@@ -80,23 +89,23 @@ export class Pem2Jwk {
     const pem = this.convertBufferToString(privatePem);
     this.checkISValidPemType(pem, "private");
 
+    const tempFolderPath = this.createTempFolder();
+    const tempFilePath = path.join(tempFolderPath, this.TEMP_FILE_NAME);
+
     const JWK = await new Promise<PublicJWK<T>>((resolve, reject) => {
-      this.createFile(this.TEMP_PEM_FILE_NAME, pem);
+      this.createFile(tempFilePath, pem);
 
-      exec(
-        `openssl rsa -in ${this.TEMP_PEM_FILE_NAME} -pubout`,
-        (error, stdout) => {
-          if (error != null) {
-            reject(error);
-            return;
-          }
+      exec(`openssl rsa -in ${tempFilePath} -pubout`, (error, stdout) => {
+        if (error != null) {
+          reject(error);
+          return;
+        }
 
-          resolve(Pem2Jwk.fromPublic(stdout, extraKeys));
-        },
-      );
+        resolve(Pem2Jwk.fromPublic(stdout, extraKeys));
+      });
     });
 
-    this.removeFile(this.TEMP_PEM_FILE_NAME);
+    this.removeFile(tempFilePath);
 
     return JWK;
   }
